@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>شريط الأسعار</title>
+  <style>
+    body { margin: 0; font-family: sans-serif; direction: rtl; }
+    .ticker {
+      background: #222;
+      color: #fff;
+      padding: 10px;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 18px;
+    }
+    .ticker-content {
+      display: inline-block;
+      padding-left: 100%;
+      animation: scroll-left 20s linear infinite;
+    }
+    @keyframes scroll-left {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-100%); }
+    }
+  </style>
+</head>
+<body>
+  <div class="ticker">
+    <div class="ticker-content" id="ticker-text">جارٍ تحميل الأسعار...</div>
+  </div>
+
+  <script>
+    async function fetchPrices() {
+      const response = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vS8pKlc53Lj0vCbqeht-egU__BHXWFRCWQV2lhDmIKUXwTwi6CT7Qh64SIg6QP9OGgXdcLWCnMoGte4/pubhtml");
+      const data = await response.text();
+      const rows = data.trim().split('\n').slice(1);
+
+      const tickerItems = rows.map(row => {
+        const [product, price] = row.split(',');
+        return `  ${product.trim()}: ${price.trim()}$`;
+      });
+
+      document.getElementById('ticker-text').textContent = tickerItems.join(' | ');
+    }
+
+    fetchPrices();
+  </script>
+</body>
+</html>
