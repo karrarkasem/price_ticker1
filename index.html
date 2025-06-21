@@ -37,7 +37,7 @@
 
       const tickerItems = rows.map(row => {
         const [product, price] = row.split(',');
-        return `  ${product.trim()}: ${price.trim()}$`;
+        return `  {product.trim()}: {price.trim()}`;
       });
 
       document.getElementById('ticker-text').textContent = tickerItems.join(' | ');
